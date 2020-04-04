@@ -9,12 +9,22 @@ endgametime = 30
 
 
 class Event1:
+    datatypes = {
+        "didhetry": "text",
+        "didhedo": "smallint"
+    }
+
     def __init__(self, didhetry, didhedo):
         self.didhetry = didhetry
         self.didhedo = didhedo
 
 
 class Itdobelikethat:
+    datatypes = {
+        "theysayitaint": "text",
+        "butitdo": "smallint"
+    }
+
     def __init__(self, theysayitaint, butitdo):
         self.theysayitaint = theysayitaint
         self.butitdo = butitdo

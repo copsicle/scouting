@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 __author__ = "Gonen Cohen"
 import psycopg2 as psql
+import logging as log
 from Objects import *
 from datetime import datetime as dt
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT as AC
@@ -38,7 +39,7 @@ def create_new_database(name, user, password):  # , scname
     return connect_to_database(name, user, password)
 
 
-def check_database(dbname, user, password):  # , scname
+def check_database(dbname, user, password=getpass("Input Postgres password: ")):  # , scname
     """
     Check if the desired database exists already and if not calls create_new_database()
     getpass() asks to input the user password safely
@@ -47,8 +48,6 @@ def check_database(dbname, user, password):  # , scname
     :param password: Password of the database owner
     :return: Database connection
     """
-    if password == "":
-        password = getpass("Input Postgres password: ")
     try:
         # with connect_to_database(dbname, user, passw) as dab, dab.cursor() as curs:
         #    create_schema(curs, scname, user)
@@ -129,6 +128,7 @@ def get_template_list(year):
                         if par not in template_list.keys():
                             if par not in ber.datatypes.keys(): continue
                             template_list.update({par: ber.datatypes[par]})
+    log.debug(template_list)
     return template_list
 
 
@@ -139,14 +139,30 @@ def create_template(year, templist, cu, user, name="templates"):
         query += f"{i} {l.upper()},"
     query = query[:-1]
     query += ");"
-    print(query)
-    return query
+    log.debug(query)
+    try:
+        cu.execute(query)
+    except psql.ProgrammingError:
+        cu.execute(f"DROP TABLE {name}.TEMP_{year};")
+        cu.execute(query)
+
+
+def database_console(cu):
+    print("Entering console mode, enter q to exit")
+    while True:
+        try:
+            query = input("Enter query : ")
+            if query == "q": break
+            print(cu.execute(query))
+        except Exception as e: print(e)
 
 
 if __name__ == "__main__":
-    with check_database("scouting", "gonen", "4590") as db, db.cursor() as cur:
+    log.basicConfig(level=log.DEBUG)
+    with check_database("scouting", "postgres", "4590") as db, db.cursor() as cur:
         try:
             db.autocommit = True
-            create_template(2020, get_template_list(2020), cur, "gonen")
+            create_template(2020, get_template_list(2020), cur, "postgres")
+            db.rollback()
         except Exception as e:
             print(e)
