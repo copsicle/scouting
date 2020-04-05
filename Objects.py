@@ -28,8 +28,8 @@ class EventWrapper:
     datatypes = {
         "timestamp": "timestamp",
         "displayname": "text",
-        "starttime": "real",
-        "endtime": "real",
+        "starttime": "time",
+        "endtime": "time",
         "gamephase": "text",
         "comment": "text",
         "eventid": "integer",

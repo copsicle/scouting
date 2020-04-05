@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q+cojc49^8fj$t4ty4)#8&v1d*ha!7g!qkc&rfy_+fm^an42qo'
+SECRET_KEY = 'y8043()k-am+ku!@+3idhd&s$sq0^^v*7wv0l9dsdf606^t6v^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'scouting.apps.ScoutingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,9 +76,21 @@ WSGI_APPLICATION = 'web.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'web',
+        'USER': 'postgres',
+        'PASSWORD': '4590',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'data': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'scouting',
+        'USER': 'postgres',
+        'PASSWORD': '4590',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
 }
 
 
@@ -105,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'IDT'
 
 USE_I18N = True
 
